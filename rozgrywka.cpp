@@ -14,8 +14,10 @@ class Kula;
 //---------------------------------------------------------PLANSZA----
 class Plansza
 {
-public:
+private:
     int k, n, m;               // n wiersz, m kolumna, k liczba tur
+
+public:
     vector<Kula *> tabk;       // wektor na kulki
     vector<Odbijacz *> tabo;   // wektor na odbijacze
     void sprawdz_poz_kul();    // sprawdza czy kulki sa na krawedziach, albo czy przeszły przez zjadajacy
@@ -26,6 +28,8 @@ public:
     void przesun();            // przesuwa kulki
     void wypisz();             // wypisuje wspolrzedne
     int getk();
+    int getn();
+    int getm();
     void setk(int c);
     int getr();
 
@@ -39,8 +43,9 @@ public:
 //-------------------------------------------------------KULA
 class Kula
 {
-public:
+private:
     double p, r, q, a, b, x, y;                 // p predkosc, (r,q)-punkt startowy, (x,y) położenie, [a,b]-wektor ruchu przyjmujący wartości np. [-1,0] - w lewo, [1,1] - gorny lewy skos
+public:
     void wypisz();                              // wypisuje wsporzedne
     void przesun();                             // przesuwa kulke
     bool czy_na_kul(Kula &k);                   // sprawdza czy jest na tym samym polu co inna kulka
@@ -73,8 +78,9 @@ public:
 //---------------------------------------------------------ODBIJACZ----
 class Odbijacz
 {
-public:
+private:
     double x, y; // (x,y) połozenie na planszy
+public:
     double getx() const;
     double gety() const;
     void setx(double c);
@@ -324,8 +330,8 @@ void Plansza::zderzenie()
 void gra(Plansza &p, int c)
 {
     cout << "\nwczytano:\n";
-    cout << "liczba tur: " << p.k << ", szerokosc: " << p.n << ", wysokosc: " << p.m << ", liczba tur kuli wybuchowej: " << c << "\n";
-    while (p.k >= 1)
+    cout << "liczba tur: " << p.getk() << ", szerokosc: " << p.getn() << ", wysokosc: " << p.getm() << ", liczba tur kuli wybuchowej: " << c << "\n";
+    while (p.getk() >= 1)
     {
         p.przesun();
         c--;
@@ -333,12 +339,20 @@ void gra(Plansza &p, int c)
         p.sprawdz_poz_kul();
         p.sprawdz_usun();
         p.egz_ceche_odb();
-        p.k--; // przyjmuje konwencje:jesli dwie kulki spotkaja sie na odbijaczu, to odbijacz dziala na wektory predkości zamienione wczesniej przez fakt zderzenia
+        p.setk(p.getk()-1); // przyjmuje konwencje:jesli dwie kulki spotkaja sie na odbijaczu, to odbijacz dziala na wektory predkości zamienione wczesniej przez fakt zderzenia
     }
 }
 int Plansza::getk()
 {
     return k;
+}
+int Plansza::getn()
+{
+    return n;
+}
+int Plansza::getm()
+{
+    return m;
 }
 void Plansza::setk(int c)
 {
